@@ -18,7 +18,7 @@ router.post('/', function(req, res) {
         res.redirect('/auth');
     }
 
-    res.send("auth");
+    res.send("auth: " + JSON.stringify(req.body));
 });
 
 module.exports = router;
