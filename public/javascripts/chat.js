@@ -150,6 +150,17 @@
             this.storage.removeItem(name);
         }
     });
+    $.chat.User = Backbone.Model.extend({
+        urlRoot: '/auth',
+        defaults: {
+            login: '',
+            password: ''
+        },
+
+        initialize: function() {
+            console.log('user initialized');
+        }
+    });
 
     // Views
 
@@ -203,8 +214,8 @@
             return this;
         }
     });
-    $.chat.InputView = Backbone.View.extend({
-        tagName: 'div',
+    $.chat.InputLoginView = Backbone.View.extend({
+        tagName: 'input',
         className: 'inputView',
         initialize: function(){
             this.$el.attr('contentEditable',true);
@@ -216,6 +227,88 @@
         events: {
             // https://developer.mozilla.org/en-US/docs/Web/Events
             "input": "clicked"
+        },
+        clicked: function(event){
+            console.log(this.getValue());
+        },
+        getValue: function(){
+            return this.$el[0].textContent;
+        },
+        setValue: function(value){
+            this.$el[0].textContent = value;
+        },
+        render: function(){
+            this.$el.empty();
+            this.$el.append("asdf");
+            return this;
+        }
+    });
+    $.chat.InputPasswordView = Backbone.View.extend({
+        tagName: 'input',
+        className: 'inputPasswordView',
+        initialize: function(){
+            this.$el.attr('type','password');
+            //this.listenTo(this.options.parent.model, "change:names", this.listener);
+        },
+        listener: function(){
+            //this.setValue(this.getName(this.options.parent.model));
+        },
+        events: {
+            // https://developer.mozilla.org/en-US/docs/Web/Events
+            "input": "clicked"
+        },
+        clicked: function(event){
+            console.log(this.getValue());
+        },
+        getValue: function(){
+            return this.$el[0].textContent;
+        },
+        setValue: function(value){
+            this.$el[0].textContent = value;
+        },
+        render: function(){
+            this.$el.empty();
+            this.$el.append("asdf");
+            return this;
+        }
+    });
+    $.chat.InputFormdView = Backbone.View.extend({
+        tagName: 'form',
+        id: 'auth',
+        //className: 'inputPasswordView',
+
+        initialize: function () {
+            this.$el.attr('method','post');
+            this.$el.attr('action','/auth');
+
+            this.model = new $.chat.User();
+            this.render();
+        },
+
+        events : {
+            // https://developer.mozilla.org/en-US/docs/Web/Events
+            "change" : "change",
+            "submit" : "login"
+        },
+        login : function( event) {
+            console.log('login');
+            event.preventDefault();
+            var self = this;
+            this.model.login(true, {
+                success: function( model) {
+                    app.alertSuccess( "User logged in");
+                    self.render();
+                },
+                error: function( model, response) {
+                    app.alertError("Could not login user: " + response.error_description);
+                }
+            });
+            event.currentTarget.checkValidity();
+            return false;
+        },
+
+        listener: function(){
+            //this.setValue(this.getName(this.options.parent.model));
         },
         clicked: function(event){
             console.log(this.getValue());
@@ -253,8 +346,14 @@
             //var nameView = new $.chat.NamesView({model: this.linesModel});
             //$body.append(nameView.render().el);
 
-            var inputView = new $.chat.InputView({model: this.linesModel});
-            $body.append(inputView.render().el);
+            var inputLoginView = new $.chat.InputLoginView({model: this.linesModel});
+            $body.append(inputLoginView.render().el);
+
+            var inputPasswordView = new $.chat.InputPasswordView({model: this.linesModel});
+            $body.append(inputPasswordView.render().el);
+
+            var inputFormView = new $.chat.InputFormdView({model: this.linesModel});
+            $body.append(inputFormView.render().el);
         },
 
         doRestart: function(index){

@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var testPassed = require('./routes/testPassed');
+var auth = require('./routes/auth');
 
 var app = express();
 var session = require('express-session');
@@ -19,13 +19,11 @@ app.config = {
 };
 
 // TODO, move method to module
-function configure(config){
+function loadFromJSONFile(extendedObject, filePath){
     var fs = require('fs');
 
-    var configPath = __dirname + '/config.txt';
-
     try {
-        var filedata = fs.readFileSync(configPath, {encoding: "utf8"});
+        var filedata = fs.readFileSync(filePath, {encoding: "utf8"});
         // some hack with first symbol =/
         filedata = filedata.replace(/^\uFEFF/, '');
         // parsing file to JSON object
@@ -37,11 +35,11 @@ function configure(config){
                 if (jsondata.hasOwnProperty(property)) {
                     objectFieldsCounter++;
 
-                    config[property] = jsondata[property];
+                    extendedObject[property] = jsondata[property];
                 }
             }
-            console.log("Configured fields:", objectFieldsCounter);
-            console.log("Current configuration:", config);
+            console.log("Loaded fields:", objectFieldsCounter);
+            console.log("Current object:", extendedObject);
         } else {
             console.log('No json data in file');
         }
@@ -50,7 +48,8 @@ function configure(config){
     }
 }
 // now config should be loaded from config.txt file
-configure(app.config);
+//console.log(JSON.stringify(app.config));
+loadFromJSONFile(app.config, path.join(__dirname, 'config.txt'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -76,7 +75,7 @@ app.use(session({
 
 app.use('/', routes);
 app.use('/users', users);
-app.use('/testPassed', testPassed);
+app.use('/auth', auth);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -86,11 +85,10 @@ app.use(function(req, res, next) {
 });
 
 app.sessions = {};
-// TODO, move to DB
-app.users = {
-    "c0": "passc0",
-    "c1": "passc1"
-};
+
+// TODO, move to DB, maybe config too?
+app.users = {};
+loadFromJSONFile(app.users, path.join(__dirname, 'users.txt'));
 
 function loadUser(req, res, next) {
     if (config.authentication == false) {
@@ -102,7 +100,15 @@ function loadUser(req, res, next) {
     //req.session.user = null;
     if (req.session.id) {
         if (req.session.user == null) {
+
+            for (var user in app.users) {
+                if (app.users.hasOwnProperty(user)){
+                    ;
+                }
+            }
+
             UserSessions.find({sessionId: req.session.id}).limit(1).toArray(function(err, currentSessions) {
+
                 if (currentSessions[0]) {
                     Users.find({_id: skin.toId(currentSessions[0].userId)}).limit(1).toArray(function(err, users){
                         if (users[0]) {
@@ -126,7 +132,6 @@ function loadUser(req, res, next) {
             next();
         }
     } else {
-        req.session.message = 'что-то неправильно';
         res.send('Включите cookies в своем браузере<br>Please enable cookies in your browser');
         //next();
     }

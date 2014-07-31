@@ -1,7 +1,7 @@
 body {
     padding: 50px;
     margin: 0px;
-    font: 1.5em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 2.5em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
     color: #ECE9E9;
     background-color: #343434;
 }
@@ -9,16 +9,55 @@ a {
     color: #00B7FF;
 }
 
-.inputView {
+.inputViewDiv {
     -moz-appearance: textfield;
     -webkit-appearance: textfield;
-    background-color: -moz-field;
+
     border: 0px solid darkgray;
+    margin-top: 0px;
+    padding: 0px 1px;
+
+    width: 398px;
+
     /*background-color: #00eeff;
+    background-color: -moz-field;*/
+    box-shadow: 1px 1px 1px 0 lightgray inset;
+    /*font: -moz-field;
+    font: -webkit-small-control;*/
+
+}
+.inputPasswordView {
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid darkgray;
+    font-size: 1em;
+    color: #ECE9E9;
+    background-color: #343434;
+    width: 398px;
+
+    /*
     box-shadow: 1px 1px 1px 0 lightgray inset;
     font: -moz-field;
     font: -webkit-small-control;
     margin-top: 5px;
-    padding: 2px 3px;*/
+    padding: 2px 3px;
+    */
+}
+
+.inputView {
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid darkgray;
+    font-size: 1em;
+    color: #ECE9E9;
+    background-color: #343434;
     width: 398px;
+
+    /*
+    box-shadow: 1px 1px 1px 0 lightgray inset;
+    font: -moz-field;
+    font: -webkit-small-control;
+    margin-top: 5px;
+    padding: 2px 3px;
+    */
 }
