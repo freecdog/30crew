@@ -1,0 +1,15 @@
+extends layout
+
+block content
+    h1= title
+
+
+    script(src="/javascripts/jquery-1.9.1.js")
+    script(src="/javascripts/underscore.js")
+    script(src="/javascripts/backbone.js")
+    script(src='/javascripts/chat.js')
+    script.
+        (function($) {
+            $.chat.bootstrap();
+        })(jQuery);
+

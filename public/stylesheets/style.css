@@ -1,0 +1,24 @@
+body {
+    padding: 50px;
+    margin: 0px;
+    font: 1.5em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
+    color: #ECE9E9;
+    background-color: #343434;
+}
+a {
+    color: #00B7FF;
+}
+
+.inputView {
+    -moz-appearance: textfield;
+    -webkit-appearance: textfield;
+    background-color: -moz-field;
+    border: 0px solid darkgray;
+    /*background-color: #00eeff;
+    box-shadow: 1px 1px 1px 0 lightgray inset;
+    font: -moz-field;
+    font: -webkit-small-control;
+    margin-top: 5px;
+    padding: 2px 3px;*/
+    width: 398px;
+}
