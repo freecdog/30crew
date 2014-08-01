@@ -3,7 +3,7 @@ var router = express.Router();
 
 router.get('/', function(req, res) {
     console.log(JSON.stringify(req.app.sessions));
-    res.render('index', { title: 'branches'});
+    res.render('index', { title: 'leaves'});
 });
 
 module.exports = router;
