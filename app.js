@@ -85,10 +85,31 @@ app.use(function(req, res, next) {
 });
 
 app.sessions = {};
+app.addSession = function(sessionID, username){
+    var session = null;
+    if (app.sessions.hasOwnProperty(sessionID)){
+        session = app.sessions[sessionID];
+    } else {
+        session = {};
+        session.time = new Date();
+        app.sessions[sessionID] = session;
+    }
+    return session;
+};
 
 // TODO, move to DB, maybe config too?
 app.users = {};
 loadFromJSONFile(app.users, path.join(__dirname, 'users.txt'));
+app.findUser = function(login, password){
+    var user = null;
+    if (app.users.hasOwnProperty(login)){
+        var userPassword = app.users[login];
+        if (userPassword == password) {
+            user = {name: login};
+        }
+    }
+    return user;
+};
 
 function loadUser(req, res, next) {
     if (config.authentication == false) {

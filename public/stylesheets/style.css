@@ -30,7 +30,7 @@ a {
     margin: 0px;
     padding: 0px;
     border: 1px solid darkgray;
-    font-size: 1em;
+    font: 1em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
     color: #ECE9E9;
     background-color: #343434;
     width: 398px;
@@ -43,12 +43,28 @@ a {
     padding: 2px 3px;
     */
 }
+.inputSubmitView {
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid darkgray;
+    font: 1em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
+    color: #ECE9E9;
+    background-color: #343434;
+    width: 400px;
 
+    /*
+    box-shadow: 1px 1px 1px 0 lightgray inset;
+    font: -moz-field;
+    font: -webkit-small-control;
+    margin-top: 5px;
+    padding: 2px 3px;
+    */
+}
 .inputView {
     margin: 0px;
     padding: 0px;
     border: 1px solid darkgray;
-    font-size: 1em;
+    font: 1em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
     color: #ECE9E9;
     background-color: #343434;
     width: 398px;
@@ -61,3 +77,8 @@ a {
     padding: 2px 3px;
     */
 }
+
+/* webkit solution */
+::-webkit-input-placeholder { text-align:right; }
+/* mozilla solution */
+input:-moz-placeholder { text-align:right; }
