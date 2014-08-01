@@ -277,7 +277,8 @@
             this.$el.attr('type','submit');
             this.$el.attr('value','[submit]');
 
-            this.$el.css('display','none');
+            // impossible for mobile devices =/
+            //this.$el.css('display','none');
         },
         buttonTemplate: _.template("[submit]"),
         render: function() {
@@ -362,6 +363,7 @@
                 this.$el.append("<br>");
                 this.$el.append("<br>");
                 this.$el.append(this.inputPasswordView.el);
+                this.$el.append("<br>");
                 this.$el.append("<br>");
                 this.$el.append(this.inputSubmitView.el);
             }
