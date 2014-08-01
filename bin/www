@@ -7,3 +7,31 @@ app.set('port', process.env.PORT || 80);
 var server = app.listen(app.get('port'), function() {
   debug('Express server listening on port ' + server.address().port);
 });
+
+var io = require('socket.io').listen(server);
+io.set('log level', 1);
+// io.disable('heartbeats');
+
+// http://stackoverflow.com/questions/10058226/send-response-to-all-clients-except-sender-socket-io
+io.sockets.on('connection', function (socket) {
+    var emitTo = function(room, eventName, data){
+        socket.broadcast.to(room.name).emit(eventName, data);
+        room.command = { eventName:eventName, data:data };
+        console.log('event saved for room', room);
+
+        //console.log('rooms are:', rooms);
+    };
+
+    socket.on('join', function (roomName) {
+        console.log("I'l join to: ", roomName);
+        socket.join(roomName);
+
+        if(roomName == rooms.students.name) {
+            console.log('event emitted to joined student', rooms.students.command);
+            socket.emit(rooms.students.command.eventName, rooms.students.command.data);
+        }
+
+        //console.log('rooms are:', rooms);
+    });
+
+});

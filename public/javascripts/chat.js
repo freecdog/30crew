@@ -46,21 +46,10 @@
             var status = this.attributes.status;
             if (status == 0) {
                 this.urlRoot = '/api/connectPlayer';
-
-                // if pushing restart button and there is still a game (status == 20) update rate become much more than 2 sec
-                // with this restartListener, problem become smaller, but still not gone
                 this.restartListener();
-            } else if (status == 10) {
-                this.urlRoot = '/api/findGame';
             } else if (status == 20) {
                 this.updateDices();
                 this.urlRoot = '/api/rounds/' + this.attributes._id;
-            } else if (status == 70) {
-                this.urlRoot = '/api/giveup';
-            } else if (status == 90) {
-                needUpdate = false;
-                console.log("game is over");
-                //this.urlRoot = '/api/rounds/' + this.attributes._id;
             } else {
                 needUpdate = false;
                 console.warn("unknown game status:",this.attributes.status, this);
@@ -79,11 +68,6 @@
             this.fetch({
                 success: function(mdl, values){
                     //console.log("fetched:", mdl, values);
-                    if (values.status != null && mdl._previousAttributes.status != values.status) {
-                        console.log("fetched new status:", values.status != null && mdl._previousAttributes.status != values.status, values.status);
-                    } else {
-                        console.log("fetched new status:", values.status != null && mdl._previousAttributes.status != values.status);
-                    }
                     var status = self.attributes.status;
                     if (status == 0) {
                         self.changeStatus(10);
@@ -376,6 +360,7 @@
             } else {
                 this.$el.append(this.inputLoginView.el);
                 this.$el.append("<br>");
+                this.$el.append("<br>");
                 this.$el.append(this.inputPasswordView.el);
                 this.$el.append("<br>");
                 this.$el.append(this.inputSubmitView.el);
@@ -393,6 +378,17 @@
         },
         initialize: function(){
             console.log("1. app init");
+
+            this.socket = io.connect('http://' + $.chat.host);
+            this.initializeSocketIO();
+        },
+        initializeSocketIO: function(){
+            console.log("1.1. socket.io init");
+            var self = this;
+            this.socket.on('connect', (function () {
+                console.log("socket connected");
+                //this.socket.emit('join', 'students');
+            }).bind(this));
         },
         chat: function(){
             console.log("2. app route");
