@@ -8,11 +8,14 @@ var server = app.listen(app.get('port'), function() {
   debug('Express server listening on port ' + server.address().port);
 });
 
-var io = require('socket.io').listen(server);
+app.io = require('socket.io').listen(server);
+var io = app.io;
+
 io.set('log level', 1);
 // io.disable('heartbeats');
 
 // http://stackoverflow.com/questions/10058226/send-response-to-all-clients-except-sender-socket-io
+// https://github.com/Automattic/socket.io/tree/master/examples/chat
 io.sockets.on('connection', function (socket) {
     var emitTo = function(room, eventName, data){
         socket.broadcast.to(room.name).emit(eventName, data);
@@ -32,6 +35,10 @@ io.sockets.on('connection', function (socket) {
         }
 
         //console.log('rooms are:', rooms);
+    });
+
+    socket.on('jjoin', function (message) {
+        console.log("server jjoin", message);
     });
 
 });

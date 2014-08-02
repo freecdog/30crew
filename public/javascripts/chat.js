@@ -391,6 +391,9 @@
                 console.log("socket connected");
                 //this.socket.emit('join', 'students');
             }).bind(this));
+            this.socket.on('jjoin', function (message) {
+                console.log("client jjoin", message);
+            });
         },
         chat: function(){
             console.log("2. app route");
