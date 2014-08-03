@@ -97,6 +97,7 @@ app.addSession = function(sessionID, username){
     return session;
 };
 
+// TODO, interface to add new user
 // TODO, move to DB, maybe config too?
 app.users = {};
 loadFromJSONFile(app.users, path.join(__dirname, 'users.txt'));

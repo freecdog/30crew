@@ -108,4 +108,15 @@ io.on('connection', function (socket) {
             });
         }
     });
+
+    socket.on('j', function (data) {
+        console.log("jServer" + data);
+
+        // broadcast to everyone
+        io.sockets.emit('j', data);
+
+        // broadcast to everyone except socket-starter
+        //socket.broadcast.emit('j', data);
+    });
+
 });

@@ -173,21 +173,22 @@
             this.init();
         },
 
-        initializeSocketIO: function(){
-            console.log("1.1. socket.io init");
-            this.socket.on('connect', (function () {
-                console.log("socket connected");
-                //this.socket.emit('join', 'students');
-            }).bind(this));
-            this.socket.on('jjoin', function (message) {
-                console.log("client jjoin", message);
-            });
+        init: function(){
+            this.initVars();
+            this.initEvents();
+            this.initSocketIOEvents();
 
+            // TODO, cut $usernameInput and events
+            // TODO, move DOM from index.jade to chat.js
+            // TODO, integrate with login
+            // TODO, clean up css (what is the bug with "font-weight: 700" bold in chrome?)
+            // TODO, manage channels
+            // TODO, chat moderation
+
+            this.setUsername("username" + Math.round(Math.random()*10000));
         },
 
-        // socket io example
-        init: function(){
-            var self = this;
+        initVars: function(){
 
             this.FADE_TIME = 150; // ms
             this.TYPING_TIMER_LENGTH = 400; // ms
@@ -212,8 +213,10 @@
             this.typing = false;
             this.lastTypingTime = null;
             this.$currentInput = this.$usernameInput.focus();
+        },
 
-            this.socket = io();
+        initEvents: function(){
+            var self = this;
 
             this.$window.keydown(function (event) {
                 // Auto-focus the current input when a key is typed
@@ -246,6 +249,16 @@
             // Focus input when clicking on the message input's border
             this.$inputMessage.click(function () {
                 self.$inputMessage.focus();
+            });
+        },
+
+        initSocketIOEvents: function(){
+            var self = this;
+
+            this.socket = io();
+
+            this.socket.on('j', function (data) {
+                console.log("jClient" + data);
             });
 
             this.socket.on('login', function (data) {
@@ -298,11 +311,10 @@
         },
 
         // Sets the client's username
-        setUsername: function(){
-            this.username = this.cleanInput(this.$usernameInput.val().trim());
+        setUsername: function(specialName){
+            if (specialName){
+                this.username = specialName;
 
-            // If the username is valid
-            if (this.username) {
                 this.$loginPage.fadeOut();
                 this.$chatPage.show();
                 this.$loginPage.off('click');
@@ -310,6 +322,19 @@
 
                 // Tell the server your username
                 this.socket.emit('add user', this.username);
+            } else {
+                this.username = this.cleanInput(this.$usernameInput.val().trim());
+
+                // If the username is valid
+                if (this.username) {
+                    this.$loginPage.fadeOut();
+                    this.$chatPage.show();
+                    this.$loginPage.off('click');
+                    this.$currentInput = this.$inputMessage.focus();
+
+                    // Tell the server your username
+                    this.socket.emit('add user', this.username);
+                }
             }
         },
 
