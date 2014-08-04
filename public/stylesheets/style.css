@@ -1,6 +1,6 @@
-/*body {
-    padding: 50px;
-    margin: 0px;
+body {
+    /*padding: 50px;
+    margin: 0px;*/
     font: 2.5em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
     color: #ECE9E9;
     background-color: #343434;
@@ -49,7 +49,6 @@ a {
 
 ::-webkit-input-placeholder { text-align:right; }
 input:-moz-placeholder { text-align:right; }
-*/
 
 
 * {
@@ -57,11 +56,11 @@ input:-moz-placeholder { text-align:right; }
 }
 
 html {
-    font-weight: 300;
+    /*font-weight: 300;*/
     -webkit-font-smoothing: antialiased;
 }
 
-html, input {
+/*html, input {
     font-family:
     "HelveticaNeue-Light",
     "Helvetica Neue Light",
@@ -70,7 +69,7 @@ html, input {
     Arial,
     "Lucida Grande",
     sans-serif;
-}
+}*/
 
 html, body {
     height: 100%;

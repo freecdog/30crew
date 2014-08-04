@@ -50,7 +50,7 @@
         initialize: function(){
             //this.$el.attr('contentEditable',true);
             this.$el.attr('name','login');
-            this.$el.attr('placeholder','login');
+            this.$el.attr('placeholder','new login');
 
             this.$el.attr('pattern','.{3,16}');
             this.$el.attr('required', true);
@@ -108,13 +108,13 @@
             this.render();
         },
         initViews: function(){
-            this.inputLoginView = new $.manage.InputLoginView({model: this.linesModel});
+            this.inputLoginView = new $.manage.InputLoginView();
             this.inputLoginView.render();
 
-            this.inputPasswordView = new $.manage.InputPasswordView({model: this.linesModel});
+            this.inputPasswordView = new $.manage.InputPasswordView();
             this.inputPasswordView.render();
 
-            this.inputSubmitView = new $.manage.InputSubmitView({model: this.linesModel});
+            this.inputSubmitView = new $.manage.InputSubmitView();
             this.inputSubmitView.render();
         },
 

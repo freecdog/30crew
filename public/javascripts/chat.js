@@ -16,138 +16,24 @@
         },
 
         initialize: function() {
-            // localStorage - sync values among all tabs
-            // sessionStorage - keep values only in one tab
-            //this.storage = localStorage; //document.cookie; //localStorage; //sessionStorage;
-
-            //this.updateRate = 1000; // ms
-            //this.lastUpdateTime = 0;
-
             this.restartListener();
-            //this.statusChanged();
         },
 
         restartListener: function(){
             console.log("nothing is here");
             this.stopListening();
-            //this.listenTo(this, 'change:status', this.statusChanged);
-            //this.listenTo(this, 'change:rerolled', this.statusChanged);
 
             this.listenTo(this.attributes.userModel, 'change:name', this.listener);
         },
         listener: function(){
             $('body').append("there will be chat soon");
         }
-
-        /*statusChanged: function(){
-            console.log("nothing is here right now");
-            console.log("status changed");
-            var needUpdate = true;
-            var status = this.attributes.status;
-            if (status == 0) {
-                this.urlRoot = '/api/connectPlayer';
-                this.restartListener();
-            } else if (status == 20) {
-                this.updateDices();
-                this.urlRoot = '/api/rounds/' + this.attributes._id;
-            } else {
-                needUpdate = false;
-                console.warn("unknown game status:",this.attributes.status, this);
-            }
-            if (needUpdate){
-                this.updateModel();
-            }
-        },
-        */
-        /*
-        updateModel: function(){
-            console.log("nothing is here");
-            var self = this;
-            // if there are urlRoot and attributes.id it will be fetched urlRoot + / + id
-            if (this.attributes.status != 20) {
-                console.log("going to fetch", this.urlRoot);
-            }
-            this.fetch({
-                success: function(mdl, values){
-                    //console.log("fetched:", mdl, values);
-                    var status = self.attributes.status;
-                    if (status == 0) {
-                        self.changeStatus(10);
-                    } else if (status == 10) {
-                        if (new Date() - self.lastUpdateTime > self.updateRate) {
-                            self.lastUpdateTime = new Date();
-                            setTimeout(function () {
-                                self.updateModel();
-                            }, self.updateRate);
-                        } else {
-                            console.log("going to update too early", status);
-                        }
-                    } else if (status == 20) {
-                        //console.log("process fetched:", mdl, values);
-                        // there were a problem about twice fetching, but with this if it looks fine
-                        if (new Date() - self.lastUpdateTime > self.updateRate) {
-                            self.lastUpdateTime = new Date();
-                            setTimeout(function(){
-                                self.updateModel();
-                            }, self.updateRate);
-                        } else {
-                            console.log("going to update too early", status);
-                        }
-                    } else if (status == 90) {
-                        if (self._previousAttributes.status == 70) {
-                            self.changeStatus(0);
-                        }
-                        // refresh (f5) behaviour when game already ended
-                        if (self.attributes.combinations.length == 0) {
-                            var ind = self.getOwnPlayerIndex();
-                            var rlen = self.attributes.rounds[ind].length;
-                            self.setDices(self.attributes.rounds[ind][rlen-1].dices);
-                        }
-                    }
-                },
-                error: function(mdl, values, xhr){
-                    var status = self.attributes.status;
-                    console.warn("actually error", status);
-                    if (status == 10) {
-                        if (values.status == 200) {
-                            console.warn("there were case with fetching here, but now it's moved to success");
-                        } else {
-                            console.error("Connection eRRoRR", mdl, values, xhr);
-                        }
-                    } else if (status == 70) {
-                        self.changeStatus(0);
-                    } else if (status == 90) {
-                        if (self._previousAttributes.status == 70) {
-                            self.changeStatus(0);
-                        }
-                    } else {
-                        console.error("Connection error", mdl, values, xhr);
-                    }
-                }
-            });
-        },
-        */
-
-        /*
-        // storage
-        addValue: function(name,value){
-            this.storage.setItem(name, value);
-        },
-        getValue: function(name){
-            return this.storage.getItem(name);
-        },
-        existValue: function(name){
-            return this.storage.getItem(name) != null;
-        },
-        removeValue: function(name){
-            this.storage.removeItem(name);
-        }
-        */
     });
     $.chat.User = Backbone.Model.extend({
         urlRoot: '/api/auth',
         defaults: {
             login: '',
+            name: '',
             password: ''
         },
 
@@ -183,11 +69,14 @@
             socket: null
         },
         initialize: function() {
-            console.log('io initializing');
+            console.log('io initializing', this);
 
-            //this.socket = io.connect('http://' + $.chat.host);
-            //this.initializeSocketIO();
-
+            //this.init();
+            // actually userModel
+            this.listenTo(this.attributes.model, 'change:name', this.userNameChanged);
+        },
+        userNameChanged: function(){
+            console.log("userNameChanged");
             this.init();
         },
 
@@ -514,39 +403,6 @@
             return this;
         }
     });
-    $.chat.NamesView = Backbone.View.extend({
-        tagName: 'div',
-        className: 'namesView',
-        initialize: function(){
-            this.listenTo(this.model, "change:names", this.listener);
-        },
-        listener: function(){
-            this.render();
-        },
-        events: {
-            "click": "clicked"
-        },
-        clicked: function(e){
-            console.log("names:", e.target.title, this.model.attributes.names, e);
-            $.chat.app.doViewAnotherModel(parseInt(e.target.title));
-        },
-        nameTemplate: _.template('<span title="<%= index %>"> <%= name %> </span>'),
-        ownNameTemplate: _.template('<b><span title="<%= index %>"> <%= name %> </span></b>'),
-        render: function(){
-            this.$el.empty();
-            if (this.model.attributes != null && this.model.attributes.names != null) {
-                var ownIndex = this.model.getOwnPlayerIndex();
-                for (var i = 0; i < this.model.attributes.names.length; i++){
-                    if (i == ownIndex){
-                        this.$el.append(this.ownNameTemplate({name: this.model.attributes.names[i], index: i}));
-                    } else {
-                        this.$el.append(this.nameTemplate({name: this.model.attributes.names[i], index: i}));
-                    }
-                }
-            }
-            return this;
-        }
-    });
     $.chat.InputLoginView = Backbone.View.extend({
         tagName: 'input',
         className: 'inputView',
@@ -602,7 +458,7 @@
             // https://developer.mozilla.org/en-US/docs/Web/Events
             "input": "clicked"
         },
-        clicked: function(event){
+        clicked: function(){//event){
             console.log(this.getValue());
         },
         getValue: function(){
@@ -648,13 +504,13 @@
             this.render();
         },
         initViews: function(){
-            this.inputLoginView = new $.chat.InputLoginView({model: this.linesModel});
+            this.inputLoginView = new $.chat.InputLoginView();
             this.inputLoginView.render();
 
-            this.inputPasswordView = new $.chat.InputPasswordView({model: this.linesModel});
+            this.inputPasswordView = new $.chat.InputPasswordView();
             this.inputPasswordView.render();
 
-            this.inputSubmitView = new $.chat.InputSubmitView({model: this.linesModel});
+            this.inputSubmitView = new $.chat.InputSubmitView();
             this.inputSubmitView.render();
         },
 
@@ -680,7 +536,7 @@
                     console.log("User logged in", model, values);
                     self.auth = true;
 
-                    self.model.addValue("auth", model.attributes);
+                    self.model.addValue("auth", JSON.stringify(model.attributes));
 
                     self.render();
                 },
@@ -720,6 +576,44 @@
             return this;
         }
     });
+    $.chat.ChatView = Backbone.View.extend({
+        tagName: 'ul',
+        className: 'pages',
+        initialize: function(){
+            this.listenTo(this.model, "change:name", this.listener);
+        },
+        listener: function(){
+            this.render();
+        },
+        events: {
+            "click": "clicked"
+        },
+        clicked: function(e){
+            console.log("names:", e.target.title, this.model.attributes.names, e);
+            $.chat.app.doViewAnotherModel(parseInt(e.target.title));
+        },
+        chatPageTemplate: _.template('<li class="chat page"> </li>'),
+        chatAreaTemplate: _.template('<div class="chatArea"> </div>'),
+        messagesTemplate: _.template('<ul class="messages"> </ul>'),
+        inputMessageTemplate: _.template('<input class="inputMessage" placeholder="Type here...">'),
+        render: function(){
+            this.$el.empty();
+
+            var chatPage = this.chatPageTemplate();
+            var chatArea = this.chatAreaTemplate();
+            var messages = this.messagesTemplate();
+            var inputMessage = this.inputMessageTemplate();
+            //$(chatPage).append(chatArea);
+
+            this.$el.append(chatPage);
+            this.$el.find('.chat.page').append(chatArea);
+            this.$el.find('.chatArea').append(messages);
+            this.$el.find('.messages').append(inputMessage);
+            //this.$el.append(chatArea);
+
+            return this;
+        }
+    });
 
     // Router
 
@@ -730,8 +624,6 @@
         },
         initialize: function(){
             console.log("1. app init");
-
-            //this.socket = new $.chat.SocketIO();
         },
 
         chat: function(){
@@ -739,20 +631,16 @@
 
             var $body = $('body');
 
-            //var nameView = new $.chat.NamesView({model: this.linesModel});
-            //$body.append(nameView.render().el);
-
-            //var inputLoginView = new $.chat.InputLoginView({model: this.linesModel});
-            //$body.append(inputLoginView.render().el);
-
-            //var inputPasswordView = new $.chat.InputPasswordView({model: this.linesModel});
-            //$body.append(inputPasswordView.render().el);
-
             this.userModel = new $.chat.User();
             var inputFormView = new $.chat.InputFormView({model: this.userModel});
             $body.append(inputFormView.render().el);
 
-            this.linesModel = new $.chat.Lines({userModel: this.userModel});
+            this.socket = new $.chat.SocketIO({model: this.userModel});
+
+            var chatView = new $.chat.ChatView({model: this.userModel});
+            $body.append(chatView.render().el);
+
+            //this.linesModel = new $.chat.Lines({userModel: this.userModel});
 
         },
 
