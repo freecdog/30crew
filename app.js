@@ -7,7 +7,9 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var auth = require('./routes/auth');
+var manage = require('./routes/manage');
+
+var api = require('./routes/api');
 
 var app = express();
 var session = require('express-session');
@@ -75,7 +77,9 @@ app.use(session({
 
 app.use('/', routes);
 app.use('/users', users);
-app.use('/auth', auth);
+app.use('/manage', manage);
+
+app.use('/api', api);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -88,16 +92,28 @@ app.sessions = {};
 app.addSession = function(sessionID, username){
     var session = null;
     if (app.sessions.hasOwnProperty(sessionID)){
-        session = app.sessions[sessionID];
+        delete app.sessions[sessionID];
+
+        session = {};
+        session.name = username;
+        session.time = new Date();
+        app.sessions[sessionID] = session;
     } else {
         session = {};
+        session.name = username;
         session.time = new Date();
         app.sessions[sessionID] = session;
     }
     return session;
 };
+app.findSession = function(sessionID){
+    var session = null;
+    if (app.sessions.hasOwnProperty(sessionID)){
+        session = app.sessions[sessionID];
+    }
+    return session;
+};
 
-// TODO, interface to add new user
 // TODO, move to DB, maybe config too?
 app.users = {};
 loadFromJSONFile(app.users, path.join(__dirname, 'users.txt'));
@@ -111,6 +127,41 @@ app.findUser = function(login, password){
     }
     return user;
 };
+app.newUser = function(login, password){
+    var ans = null;
+
+    if (app.users.hasOwnProperty(login)) {
+        console.log("login already exist");
+    } else {
+        app.users[login] = password;
+
+        var fs = require('fs');
+
+        var filePath = path.join(__dirname, 'users.txt');
+        try {
+            var filedata = fs.readFileSync(filePath, {encoding: "utf8"});
+            // some hack with first symbol =/
+            filedata = filedata.replace(/^\uFEFF/, '');
+            // parsing file to JSON object
+            var jsondata = JSON.parse(filedata);
+
+            if (jsondata){
+                jsondata[login] = password;
+
+                fs.writeFileSync(filePath, JSON.stringify(jsondata));
+            } else {
+                console.log('No json data in file');
+            }
+        } catch (e) {
+            console.log("error:", e);
+        }
+
+        ans = app.findUser(login, password);
+    }
+
+    return ans;
+};
+
 
 function loadUser(req, res, next) {
     if (config.authentication == false) {

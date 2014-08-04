@@ -3,16 +3,17 @@ extends layout
 block content
     p= title
 
-    ul(class="pages")
-        li(class="chat page")
-            div(class="chatArea")
-                ul(class="messages")
-            input(class="inputMessage", placeholder="Type here...")
+    //-
+        ul(class="pages")
+            li(class="chat page")
+                div(class="chatArea")
+                    ul(class="messages")
+                input(class="inputMessage", placeholder="Type here...")
 
-        li(class="login page")
-            div(class="form")
-                h3(class="title") What's your nickname?
-                input(class="usernameInput", type="text", maxlength="14")
+            li(class="login page")
+                div(class="form")
+                    h3(class="title") What's your nickname?
+                    input(class="usernameInput", type="text", maxlength="14")
 
     script(src="/javascripts/jquery-1.9.1.js")
     script(src="/javascripts/underscore.js")

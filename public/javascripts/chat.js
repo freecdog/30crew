@@ -145,19 +145,37 @@
         */
     });
     $.chat.User = Backbone.Model.extend({
-        urlRoot: '/auth',
+        urlRoot: '/api/auth',
         defaults: {
             login: '',
             password: ''
         },
 
         initialize: function() {
+            // localStorage - sync values among all tabs
+            // sessionStorage - keep values only in one tab
+            this.storage = localStorage; //document.cookie; //localStorage; //sessionStorage;
+
             console.log('user initialized');
         },
 
         login: function(attributes, callback){
             this.save(attributes, callback);
             this.unset('password');
+        },
+
+        // storage
+        addValue: function(name,value){
+            this.storage.setItem(name, value);
+        },
+        getValue: function(name){
+            return this.storage.getItem(name);
+        },
+        existValue: function(name){
+            return this.storage.getItem(name) != null;
+        },
+        removeValue: function(name){
+            this.storage.removeItem(name);
         }
     });
     $.chat.SocketIO = Backbone.Model.extend({
@@ -536,6 +554,10 @@
             //this.$el.attr('contentEditable',true);
             this.$el.attr('name','login');
             this.$el.attr('placeholder','login');
+
+            this.$el.attr('pattern','.{2,16}');
+            this.$el.attr('required', true);
+            this.$el.attr('title', 'min 2, max 16');
             //this.listenTo(this.options.parent.model, "change:names", this.listener);
         },
         listener: function(){
@@ -567,6 +589,10 @@
             this.$el.attr('type','password');
             this.$el.attr('name','password');
             this.$el.attr('placeholder','password');
+
+            this.$el.attr('pattern','.{4,16}');
+            this.$el.attr('required', true);
+            this.$el.attr('title', 'min 4, max 16');
             //this.listenTo(this.options.parent.model, "change:names", this.listener);
         },
         listener: function(){
@@ -614,8 +640,8 @@
         //className: 'inputPasswordView',
 
         initialize: function () {
-            this.$el.attr('method','post');
-            this.$el.attr('action','/auth');
+            //this.$el.attr('method','post');
+            //this.$el.attr('action','/api/auth');
 
             this.initViews();
 
@@ -653,6 +679,9 @@
                 success: function(model,values) {
                     console.log("User logged in", model, values);
                     self.auth = true;
+
+                    self.model.addValue("auth", model.attributes);
+
                     self.render();
                 },
                 error: function( model, response) {
@@ -702,7 +731,7 @@
         initialize: function(){
             console.log("1. app init");
 
-            this.socket = new $.chat.SocketIO();
+            //this.socket = new $.chat.SocketIO();
         },
 
         chat: function(){

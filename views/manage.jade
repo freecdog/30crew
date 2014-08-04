@@ -1,0 +1,15 @@
+//
+   Created by yarvyk on 04.08.2014.
+
+extends layout
+block content
+    p= title
+
+    script(src="/javascripts/jquery-1.9.1.js")
+    script(src="/javascripts/underscore.js")
+    script(src="/javascripts/backbone.js")
+    script(src='/javascripts/manage.js')
+    script.
+        (function($) {
+            $.manage.bootstrap();
+        })(jQuery);
