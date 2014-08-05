@@ -34,7 +34,8 @@
         defaults: {
             login: '',
             name: '',
-            password: ''
+            password: '',
+            ready: false
         },
 
         initialize: function() {
@@ -65,9 +66,6 @@
         }
     });
 
-    // TODO, cut $usernameInput and events
-    // TODO, move DOM from index.jade to chat.js
-    // TODO, integrate with login
     // TODO, clean up css (what is the bug with "font-weight: 700" bold in chrome?)
     // TODO, manage channels
     // TODO, chat moderation
@@ -123,6 +121,7 @@
             this.typing = false;
             this.lastTypingTime = null;
             //this.$currentInput = this.$usernameInput.focus();
+            this.$currentInput = this.$inputMessage.focus();
         },
 
         initEvents: function(){
@@ -140,7 +139,8 @@
                         self.socket.emit('stop typing');
                         self.typing = false;
                     } else {
-                        self.setUsername();
+                        console.log("not used now");
+                        //self.setUsername();
                     }
                 }
             });
@@ -222,11 +222,14 @@
 
         // Sets the client's username
         setUsername: function(specialName){
+            console.log("setting username", specialName);
             if (specialName){
+                console.log("special username ofc");
                 this.username = specialName;
 
                 this.$loginPage.fadeOut();
                 this.$chatPage.show();
+                //this.$chatPage.css("display", "list-item");
                 this.$loginPage.off('click');
                 this.$currentInput = this.$inputMessage.focus();
 
@@ -588,13 +591,6 @@
         listener: function(){
             this.render();
         },
-        events: {
-            "click": "clicked"
-        },
-        clicked: function(e){
-            console.log("names:", e.target.title, this.model.attributes.names, e);
-            $.chat.app.doViewAnotherModel(parseInt(e.target.title));
-        },
         chatPageTemplate: _.template('<li class="chat page"> </li>'),
         chatAreaTemplate: _.template('<div class="chatArea"> </div>'),
         messagesTemplate: _.template('<ul class="messages"> </ul>'),
@@ -606,13 +602,18 @@
             var chatArea = this.chatAreaTemplate();
             var messages = this.messagesTemplate();
             var inputMessage = this.inputMessageTemplate();
-            //$(chatPage).append(chatArea);
 
             this.$el.append(chatPage);
-            this.$el.find('.chat.page').append(chatArea);
-            this.$el.find('.chatArea').append(messages);
-            this.$el.find('.messages').append(inputMessage);
-            //this.$el.append(chatArea);
+            {
+                var chatPageElement = this.$el.find('.chat.page');
+                chatPageElement.append(chatArea);
+                {
+                    this.$el.find('.chatArea').append(messages);
+                }
+                chatPageElement.append(inputMessage);
+            }
+
+            console.log("elements rendered");
 
             return this;
         }
@@ -638,10 +639,10 @@
             var inputFormView = new $.chat.InputFormView({model: this.userModel});
             $body.append(inputFormView.render().el);
 
-            this.socket = new $.chat.SocketIO({model: this.userModel});
-
             var chatView = new $.chat.ChatView({model: this.userModel});
             $body.append(chatView.render().el);
+
+            this.socket = new $.chat.SocketIO({model: this.userModel});
 
             //this.linesModel = new $.chat.Lines({userModel: this.userModel});
 
