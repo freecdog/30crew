@@ -90,6 +90,9 @@
         init: function(){
             console.log('io initializing', this);
 
+            // TODO, it doesn't looks like good MVC practice
+            $.chat.app.$body.append($.chat.app.chatView.render().el);
+
             this.initVars();
             this.initEvents();
             this.initSocketIOEvents();
@@ -572,11 +575,16 @@
             if (this.auth) {
                 console.log("login form out");
             } else {
-                this.$el.append(this.inputLoginView.el);
+                var img = $('<img/>', {
+                    class: 'logoImage'
+                }).appendTo(this.$el);
                 this.$el.append("<br>");
+
+                this.$el.append(this.inputLoginView.el);
+                //this.$el.append("<br>");
                 this.$el.append("<br>");
                 this.$el.append(this.inputPasswordView.el);
-                this.$el.append("<br>");
+                //this.$el.append("<br>");
                 this.$el.append("<br>");
                 this.$el.append(this.inputSubmitView.el);
             }
@@ -634,14 +642,14 @@
         chat: function(){
             console.log("2. app route");
 
-            var $body = $('body');
+            this.$body = $('body');
 
             this.userModel = new $.chat.User();
             var inputFormView = new $.chat.InputFormView({model: this.userModel});
-            $body.append(inputFormView.render().el);
+            this.$body.append(inputFormView.render().el);
 
-            var chatView = new $.chat.ChatView({model: this.userModel});
-            $body.append(chatView.render().el);
+            this.chatView = new $.chat.ChatView({model: this.userModel});
+            //this.$body.append(this.chatView.render().el);
 
             this.socket = new $.chat.SocketIO({model: this.userModel});
 

@@ -9,6 +9,13 @@ a {
     color: #00B7FF;
 }
 
+.jGreen {
+    color: #00b162;
+}
+.jRed {
+    color: #d15151;
+}
+
 .inputViewDiv {
     -moz-appearance: textfield;
     -webkit-appearance: textfield;
@@ -20,41 +27,74 @@ a {
     box-shadow: 1px 1px 1px 0 lightgray inset;
 }
 .inputPasswordView {
-    margin: 0px;
+    display: block;
+    margin: 0 auto;
+
     padding: 0px;
     border: 1px solid darkgray;
     font: 1em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
     color: #ECE9E9;
     background-color: #343434;
-    width: 298px;
+
+    width: 90%;
+    max-width: 512px;
 }
 .inputSubmitView {
-    margin: 0px;
+    display: block;
+    margin: 0 auto;
+
     padding: 0px;
     border: 1px solid darkgray;
     font: 1em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
-    color: #ECE9E9;
+    color: darkgray;
     background-color: #343434;
-    width: 300px;
+
+    width: 90%;
+    max-width: 512px;
 }
 .inputView {
-    margin: 0px;
+    display: block;
+    margin: 0 auto;
+
     padding: 0px;
     border: 1px solid darkgray;
     font: 1em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
     color: #ECE9E9;
     background-color: #343434;
-    width: 298px;
+
+    width: 90%;
+    max-width: 512px;
 }
 .inputBannedIpView {
-    margin: 0px;
+    display: block;
+    margin: 0 auto;
+
     padding: 0px;
     border: 1px solid darkgray;
     font: 1em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
     color: #ECE9E9;
     background-color: #343434;
-    width: 298px;
+
+    width: 90%;
+    max-width: 512px;
 }
+.logoImage {
+    content: url('../images/leaf-256-green.png');
+
+    display: block;
+    margin: 0 auto;
+
+    width: 90%;
+    max-width: 512px;
+}
+.manageTitle {
+    display: block;
+    margin: 0 auto;
+
+    width: 90%;
+    max-width: 512px;
+}
+
 
 ::-webkit-input-placeholder { text-align:right; }
 input:-moz-placeholder { text-align:right; }

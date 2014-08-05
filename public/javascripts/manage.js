@@ -163,19 +163,20 @@
             event.currentTarget.checkValidity();
             return false;
         },
-        titleTemplate: _.template("<div>Add user (leaf):</div>"),
+        titleTemplate: _.template('<div class="manageTitle jGreen">Add user (leaf):</div>'),
         render: function(){
             this.$el.empty();
 
             this.$el.append(this.titleTemplate());
 
             this.$el.append(this.inputLoginView.el);
-            this.$el.append("<br>");
+            //this.$el.append("<br>");
             this.$el.append("<br>");
             this.$el.append(this.inputPasswordView.el);
-            this.$el.append("<br>");
+            //this.$el.append("<br>");
             this.$el.append("<br>");
             this.$el.append(this.inputSubmitView.el);
+            this.$el.append("<br>");
 
             return this;
         }
@@ -246,16 +247,17 @@
             event.currentTarget.checkValidity();
             return false;
         },
-        titleTemplate: _.template("<div>Ban ip:</div>"),
+        titleTemplate: _.template('<div class="manageTitle jRed">Ban ip:</div>'),
         render: function(){
             this.$el.empty();
 
             this.$el.append(this.titleTemplate());
 
             this.$el.append(this.inputBannedIpView.el);
-            this.$el.append("<br>");
+            //this.$el.append("<br>");
             this.$el.append("<br>");
             this.$el.append(this.inputSubmitView.el);
+            this.$el.append("<br>");
 
             return this;
         }
