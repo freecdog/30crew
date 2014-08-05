@@ -14,14 +14,25 @@
             login: '',
             password: ''
         },
-
         initialize: function() {
-            console.log('user initialized');
+            console.log('User initialized');
         },
-
         login: function(attributes, callback){
             this.save(attributes, callback);
             this.unset('password');
+        }
+    });
+
+    $.manage.BannedIp = Backbone.Model.extend({
+        urlRoot: '/api/newBannedIp',
+        defaults: {
+            ip: ''
+        },
+        initialize: function() {
+            console.log('BannedIp initialized');
+        },
+        banIp: function(attributes, callback){
+            this.save(attributes, callback);
         }
     });
 
@@ -139,25 +150,109 @@
                     console.log("User created", model, values);
                     alert("User created");
 
-                    self.el.elements["login"].value.clear();
-                    self.el.elements["password"].value.clear();
+                    //self.el.elements["login"].value.clear();
+                    //self.el.elements["password"].value.clear();
 
                     self.render();
                 },
                 error: function( model, response) {
-                    console.log("Could not create user: ", response);
+                    console.log("Could not create user:", response);
+                    alert("Could not create user, no permission");
                 }
             });
             event.currentTarget.checkValidity();
             return false;
         },
+        titleTemplate: _.template("<div>Add user (leaf):</div>"),
         render: function(){
             this.$el.empty();
+
+            this.$el.append(this.titleTemplate());
 
             this.$el.append(this.inputLoginView.el);
             this.$el.append("<br>");
             this.$el.append("<br>");
             this.$el.append(this.inputPasswordView.el);
+            this.$el.append("<br>");
+            this.$el.append("<br>");
+            this.$el.append(this.inputSubmitView.el);
+
+            return this;
+        }
+    });
+
+    $.manage.InputBannedIpView = Backbone.View.extend({
+        tagName: 'input',
+        className: 'inputBannedIpView',
+        initialize: function(){
+            this.$el.attr('name','ip');
+            this.$el.attr('placeholder','banned ip');
+
+            this.$el.attr('pattern','.{7,15}');
+            this.$el.attr('required', true);
+            this.$el.attr('title', 'IPv4 address, example: 198.18.255.11');
+        },
+        render: function(){
+            this.$el.empty();
+            return this;
+        }
+    });
+    $.manage.InputFormBannedIpView = Backbone.View.extend({
+        tagName: 'form',
+        id: 'bannedIp',
+
+        initialize: function () {
+            this.initViews();
+
+            this.render();
+        },
+        initViews: function(){
+            this.inputBannedIpView = new $.manage.InputBannedIpView();
+            this.inputBannedIpView.render();
+
+            this.inputSubmitView = new $.manage.InputSubmitView();
+            this.inputSubmitView.render();
+        },
+
+        events : {
+            // https://developer.mozilla.org/en-US/docs/Web/Events
+            //"change" : "change",
+            "submit" : "newBannedIp"
+        },
+        newBannedIp : function(event) {
+            var self = this;
+
+            console.log('trying to add new banned ip');
+            event.preventDefault();
+
+            this.model.set({
+                ip: this.el.elements["ip"].value
+            });
+
+            this.model.banIp(null, {
+                success: function(model,values) {
+                    console.log("Ip was successfully banned", model, values);
+                    alert("Ip was successfully banned");
+
+                    //self.el.elements["ip"].value.clear();
+
+                    self.render();
+                },
+                error: function( model, response) {
+                    console.log("Could not ban ip:", response);
+                    alert("Could not ban ip, no permission");
+                }
+            });
+            event.currentTarget.checkValidity();
+            return false;
+        },
+        titleTemplate: _.template("<div>Ban ip:</div>"),
+        render: function(){
+            this.$el.empty();
+
+            this.$el.append(this.titleTemplate());
+
+            this.$el.append(this.inputBannedIpView.el);
             this.$el.append("<br>");
             this.$el.append("<br>");
             this.$el.append(this.inputSubmitView.el);
@@ -185,6 +280,10 @@
             this.userModel = new $.manage.User();
             var inputFormView = new $.manage.InputFormView({model: this.userModel});
             $body.append(inputFormView.render().el);
+
+            this.bannedIpModel = new $.manage.BannedIp();
+            var inputFormBannedIpView = new $.manage.InputFormBannedIpView({model: this.bannedIpModel});
+            $body.append(inputFormBannedIpView.render().el);
         }
     });
 

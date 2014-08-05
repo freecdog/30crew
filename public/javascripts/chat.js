@@ -70,6 +70,7 @@
     // TODO, manage channels
     // TODO, chat moderation
     // TODO, user font change posibility
+    // TODO, anti DDOS is needed, actually with huge Paste data
 
     $.chat.SocketIO = Backbone.Model.extend({
         defaults: {
@@ -174,7 +175,7 @@
             this.socket.on('login', function (data) {
                 self.connected = true;
                 // Display the welcome message
-                var message = "Welcome to Socket.IO Chat &mdash; ";
+                var message = 'Welcome to "leaves" chat!';
                 self.log(message, {
                     prepend: true
                 });

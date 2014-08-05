@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
 var manage = require('./routes/manage');
 
 var api = require('./routes/api');
@@ -57,6 +56,46 @@ loadFromJSONFile(app.config, path.join(__dirname, 'config.txt'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+// list of banned IPs
+app.banned = {};
+loadFromJSONFile(app.banned, path.join(__dirname, 'banned.txt'));
+app.newBannedIp = function(bannedIp){
+    var ans = null;
+
+    if (app.banned.hasOwnProperty(bannedIp)) {
+        console.log("bannedIp already exist");
+    } else {
+        app.banned[bannedIp] = true;
+
+        var fs = require('fs');
+
+        var filePath = path.join(__dirname, 'banned.txt');
+        try {
+            var filedata = fs.readFileSync(filePath, {encoding: "utf8"});
+            // some hack with first symbol =/
+            filedata = filedata.replace(/^\uFEFF/, '');
+            // parsing file to JSON object
+            var jsondata = JSON.parse(filedata);
+
+            if (jsondata){
+                jsondata[bannedIp] = true;
+
+                fs.writeFileSync(filePath, JSON.stringify(jsondata));
+            } else {
+                console.log('No json data in file');
+            }
+        } catch (e) {
+            console.log("error:", e);
+        }
+
+        ans = {bannedIp: true};
+    }
+
+    return ans;
+};
+var ipbanfilter = require('./ipbanfilter');
+app.use(ipbanfilter());
+
 app.use(favicon());
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -76,14 +115,14 @@ app.use(session({
 }));
 
 app.use('/', routes);
-app.use('/users', users);
 app.use('/manage', manage);
 
 app.use('/api', api);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+    console.log(req.connection.remoteAddress);
+    var err = new Error('Hey ;) (' + req.connection.remoteAddress + '). You call this bad neighbourhood?');
     err.status = 404;
     next(err);
 });

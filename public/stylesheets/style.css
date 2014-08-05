@@ -46,6 +46,15 @@ a {
     background-color: #343434;
     width: 298px;
 }
+.inputBannedIpView {
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid darkgray;
+    font: 1em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
+    color: #ECE9E9;
+    background-color: #343434;
+    width: 298px;
+}
 
 ::-webkit-input-placeholder { text-align:right; }
 input:-moz-placeholder { text-align:right; }
@@ -146,11 +155,11 @@ ul {
 /* Font */
 
 .messages {
-    font-size: 150%;
+    font-size: 50%;
 }
 
 .inputMessage {
-    font-size: 100%;
+    font-size: 50%;
 }
 
 .log {
@@ -189,7 +198,12 @@ ul {
 /* Input */
 
 .inputMessage {
-    border: 10px solid #000;
+    margin: 0px;
+    font: 1em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
+    border: 1px solid darkgray;
+    color: #ECE9E9;
+    background-color: #343434;
+
     bottom: 0;
     height: 60px;
     left: 0;
