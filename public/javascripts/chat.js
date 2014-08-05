@@ -64,35 +64,38 @@
             this.storage.removeItem(name);
         }
     });
+
+    // TODO, cut $usernameInput and events
+    // TODO, move DOM from index.jade to chat.js
+    // TODO, integrate with login
+    // TODO, clean up css (what is the bug with "font-weight: 700" bold in chrome?)
+    // TODO, manage channels
+    // TODO, chat moderation
+    // TODO, user font change posibility
+
     $.chat.SocketIO = Backbone.Model.extend({
         defaults: {
             socket: null
         },
         initialize: function() {
-            console.log('io initializing', this);
-
             //this.init();
+
             // actually userModel
             this.listenTo(this.attributes.model, 'change:name', this.userNameChanged);
         },
         userNameChanged: function(){
-            console.log("userNameChanged");
+            console.log("userNameChanged", this.attributes.model.attributes.name);
             this.init();
         },
 
         init: function(){
+            console.log('io initializing', this);
+
             this.initVars();
             this.initEvents();
             this.initSocketIOEvents();
 
-            // TODO, cut $usernameInput and events
-            // TODO, move DOM from index.jade to chat.js
-            // TODO, integrate with login
-            // TODO, clean up css (what is the bug with "font-weight: 700" bold in chrome?)
-            // TODO, manage channels
-            // TODO, chat moderation
-
-            this.setUsername("username" + Math.round(Math.random()*10000));
+            this.setUsername(this.attributes.model.attributes.name);
         },
 
         initVars: function(){
@@ -119,7 +122,7 @@
             this.connected = false;
             this.typing = false;
             this.lastTypingTime = null;
-            this.$currentInput = this.$usernameInput.focus();
+            //this.$currentInput = this.$usernameInput.focus();
         },
 
         initEvents: function(){
