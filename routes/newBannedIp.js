@@ -6,7 +6,7 @@ var express = require('express');
 var router = express.Router();
 
 router.post('/', function(req, res) {
-    console.log(req.connection.remoteAddress);
+    req.app.userInfoLog(req.connection.remoteAddress);
 
     var newBannedIp = null;
 

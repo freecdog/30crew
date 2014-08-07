@@ -13,6 +13,10 @@ var api = require('./routes/api');
 var app = express();
 var session = require('express-session');
 
+app.userInfoLog = function(ip){
+    console.log(ip, new Date());
+};
+
 // default config
 app.config = {
     "authentication" : true,
@@ -121,7 +125,7 @@ app.use('/api', api);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    console.log(req.connection.remoteAddress);
+    app.userInfoLog(req.connection.remoteAddress);
     var err = new Error('Hey ;) (' + req.connection.remoteAddress + '). You call this bad neighbourhood?');
     err.status = 404;
     next(err);

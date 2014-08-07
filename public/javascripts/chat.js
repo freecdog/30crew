@@ -258,6 +258,11 @@
         // Sends a chat message
         sendMessage: function(){
             var message = this.$inputMessage.val();
+            if (message.length > 250) {
+                console.log("too much symbols to this chat (<250)");
+                alert("too much symbols to this chat (<250)");
+                return;
+            }
             // Prevent markup from being injected into the message
             message = this.cleanInput(message);
             // if there is a non-empty message and a socket connection

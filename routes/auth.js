@@ -10,7 +10,7 @@ router.get('/', function(req, res) {
     res.send("auth");
 });
 router.post('/', function(req, res) {
-    console.log(req.connection.remoteAddress);
+    req.app.userInfoLog(req.connection.remoteAddress);
 
     console.log(req.body.login, req.body.password);
     if (req.body.login && req.body.password) {
