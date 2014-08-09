@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var manage = require('./routes/manage');
+var registration = require('./routes/registration');
 
 var api = require('./routes/api');
 
@@ -120,6 +121,7 @@ app.use(session({
 
 app.use('/', routes);
 app.use('/manage', manage);
+app.use('/registration', registration);
 
 app.use('/api', api);
 

@@ -1,0 +1,14 @@
+//
+   Created by jaric on 09.08.2014.
+
+extends layout
+block content
+
+    script(src="/javascripts/jquery-1.9.1.js")
+    script(src="/javascripts/underscore.js")
+    script(src="/javascripts/backbone.js")
+    script(src='/javascripts/registration.js')
+    script.
+        (function($) {
+            $.registration.bootstrap();
+        })(jQuery);
