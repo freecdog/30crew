@@ -104,10 +104,15 @@
 
             this.FADE_TIME = 150; // ms
             this.TYPING_TIMER_LENGTH = 400; // ms
-            this.COLORS = [
+            /*this.COLORS = [
                 '#e21400', '#91580f', '#f8a700', '#f78b00',
                 '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
                 '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
+            ];*/
+            this.COLORS = [
+                '#91580f', '#f8a700',
+                '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
+                '#3b88eb', '#a700ff'
             ];
 
             // Initialize varibles
@@ -395,7 +400,10 @@
             }
             // Calculate color
             var index = Math.abs(hash % this.COLORS.length);
-            return this.COLORS[index];
+            if (username == "jaric" || username == "ZsM")
+                return '#e21400';
+            else
+                return this.COLORS[index];
         }
     });
 

@@ -27,7 +27,7 @@ router.post('/', function(req, res) {
         if (loginMatch && passwordMatch) {
             var session = req.app.findSession(req.session.id);
             if (session) {
-                if (session.name == "c0" || session.name == "c1") {
+                if (session.name == "jaric" || session.name == "ZsM") {
                     newUser = req.app.newUser(login, password);
                 } else {
                     console.log("User wants to add new user (" + session.name + "):", login, password);
