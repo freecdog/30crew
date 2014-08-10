@@ -29,6 +29,7 @@ router.post('/', function(req, res) {
 
         if (loginMatch && passwordMatch && promoMatch) {
             newUser = req.app.newUser(login, password, promo);
+            console.log("newUser", newUser);
         } else {
             if (!loginMatch) console.log("login isn't match regexp");
             if (!passwordMatch) console.log("password isn't match regexp");
@@ -42,7 +43,7 @@ router.post('/', function(req, res) {
 
     res.send(newUser);
 
-    console.log("current users list:", JSON.stringify(req.app.users));
+    //console.log("current users list:", JSON.stringify(req.app.users));
 });
 
 module.exports = router;

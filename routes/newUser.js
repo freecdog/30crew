@@ -46,7 +46,7 @@ router.post('/', function(req, res) {
 
     res.send(newUser);
 
-    console.log("current users list:", JSON.stringify(req.app.users));
+    //console.log("current users list:", JSON.stringify(req.app.users));
 });
 
 module.exports = router;

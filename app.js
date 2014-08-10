@@ -293,7 +293,8 @@ app.findUser = function(login, password){
     if (app.users.hasOwnProperty(login)){
         var userPassword = app.users[login];
         //if (userPassword == password) {
-        if (userPassword == app.getHash(password + login)) {
+        // encryption
+        if (userPassword == app.getHash(password+login)) {
             user = {name: login};
         }
     }
@@ -305,6 +306,8 @@ app.newUser = function(login, password, promo){
         console.log("login already exist");
     } else {
         function addUser(){
+            // encryption
+            var passwordToFind = password;
             password = app.getHash(password + login);
 
             app.users[login] = password;
@@ -330,12 +333,13 @@ app.newUser = function(login, password, promo){
                 console.log("error:", e);
             }
 
-            return app.findUser(login, password);
+            return app.findUser(login, passwordToFind);
         }
 
         if (promo) {
             if (app.usePromo(promo)) {
                 ans = addUser();
+                console.log("ans", ans);
             } else {
                 console.log('Using of promo failed');
             }

@@ -12,7 +12,6 @@ router.get('/', function(req, res) {
 router.post('/', function(req, res) {
     req.app.userInfoLog(req.connection.remoteAddress);
 
-    console.log(req.body.login, req.body.password);
     if (req.body.login && req.body.password) {
         var user = req.app.findUser(req.body.login, req.body.password);
         console.log("user:", user);
