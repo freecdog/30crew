@@ -4,6 +4,7 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var crypto = require('crypto');
 
 var routes = require('./routes/index');
 var manage = require('./routes/manage');
@@ -26,6 +27,7 @@ app.config = {
 
 // TODO, move method to module
 function loadFromJSONFile(extendedObject, filePath){
+    console.log(filePath);
     var fs = require('fs');
 
     try {
@@ -133,6 +135,14 @@ app.use(function(req, res, next) {
     next(err);
 });
 
+app.getHash = function(password){
+    var hash = crypto.createHash('sha512');
+    hash.update(password, 'utf8');
+
+    return hash.digest('base64');
+};
+//console.log(app.getHash("345234523452345"));
+
 app.sessions = {};
 app.addSession = function(sessionID, username){
     var session = null;
@@ -166,9 +176,10 @@ app.promos = {};
 loadFromJSONFile(app.promos, path.join(__dirname, 'promos.txt'));
 app.usePromo = function(promo){
     var ans = null;
-    if (app.promos.hasOwnProperty(promo)) {
+    if (app.promos.hasOwnProperty(promo) && app.promos[promo] == true) {
 
-        delete app.promos[promo];
+        //delete app.promos[promo];
+        app.promos[promo] = false;
 
         var fs = require('fs');
 
@@ -181,7 +192,8 @@ app.usePromo = function(promo){
             var jsondata = JSON.parse(filedata);
 
             if (jsondata) {
-                delete jsondata[promo];
+                //delete jsondata[promo];
+                jsondata[promo] = false;
 
                 fs.writeFileSync(filePath, JSON.stringify(jsondata));
 
@@ -198,11 +210,90 @@ app.usePromo = function(promo){
 
     return ans;
 };
+app.generatePromos = function(promosCount){
+    function makeid(length)
+    {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var firstPossible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+        for( var i=0; i < length; i++ ) {
+            if (i != 0)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            else
+                text += firstPossible.charAt(Math.floor(Math.random() * firstPossible.length));
+        }
+        return text;
+    }
+
+    var ans = null;
+
+    var promoCodes = {};
+    var promosGenerated = true;
+    for (var i = 0; i < promosCount; i++){
+
+        var promo = makeid(16).toString();
+        var isNewPromo = true;
+        for (var j = 0; j < 10; j++) {
+            if (promoCodes.hasOwnProperty(promo) || app.promos.hasOwnProperty(promo)) {
+                isNewPromo = false;
+            } else {
+                isNewPromo = true;
+                break;
+            }
+        }
+        if (isNewPromo) {
+            promoCodes[promo] = true;
+        } else {
+            console.error("something is really bad with app.promos or generator");
+            promosGenerated = false;
+        }
+    }
+
+    if (promosGenerated){
+        for (var pr in promoCodes) {
+            if (promoCodes.hasOwnProperty(pr)){
+                app.promos[pr] = true;
+            }
+        }
+
+        var fs = require('fs');
+
+        var filePath = path.join(__dirname, 'promos.txt');
+        try {
+            var filedata = fs.readFileSync(filePath, {encoding: "utf8"});
+            // some hack with first symbol =/
+            filedata = filedata.replace(/^\uFEFF/, '');
+            // parsing file to JSON object
+            var jsondata = JSON.parse(filedata);
+
+            if (jsondata) {
+                for (var pr in promoCodes) {
+                    if (promoCodes.hasOwnProperty(pr)){
+                        jsondata[pr] = true;
+                    }
+                }
+
+                fs.writeFileSync(filePath, JSON.stringify(jsondata));
+
+                ans = true;
+            } else {
+                console.log('No json data in file');
+            }
+        } catch (e) {
+            console.log("error:", e);
+        }
+    } else {
+        console.error("promos aren't generated");
+    }
+    return ans;
+};
 app.findUser = function(login, password){
     var user = null;
     if (app.users.hasOwnProperty(login)){
         var userPassword = app.users[login];
-        if (userPassword == password) {
+        //if (userPassword == password) {
+        if (userPassword == app.getHash(password + login)) {
             user = {name: login};
         }
     }
@@ -214,6 +305,8 @@ app.newUser = function(login, password, promo){
         console.log("login already exist");
     } else {
         function addUser(){
+            password = app.getHash(password + login);
+
             app.users[login] = password;
 
             var fs = require('fs');
@@ -253,7 +346,9 @@ app.newUser = function(login, password, promo){
 
     return ans;
 };
-
+//app.generatePromos(20);
+//app.newUser('c0','passc0');
+//app.newUser('c1','passc1');
 
 function loadUser(req, res, next) {
     if (config.authentication == false) {
