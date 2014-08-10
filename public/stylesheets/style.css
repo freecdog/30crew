@@ -1,3 +1,9 @@
+@font-face {
+    /* http://webdesignerwall.com/general/font-face-solutions-suggestions */
+    font-family: 'Segoe UI light';
+    src: url('../fonts/segoeuil.ttf') format('truetype');
+}
+
 body {
     /*padding: 50px;
     margin: 0px;*/
@@ -65,6 +71,19 @@ a {
     width: 90%;
     max-width: 512px;
 }
+.promoView {
+    display: block;
+    margin: 0 auto;
+
+    padding: 0px;
+    border: 1px solid darkgray;
+    font: 1em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
+    color: #ECE9E9;
+    background-color: #343434;
+
+    width: 90%;
+    max-width: 512px;
+}
 .inputBannedIpView {
     display: block;
     margin: 0 auto;
@@ -94,7 +113,13 @@ a {
     width: 90%;
     max-width: 512px;
 }
+.indexAnchor {
+    display: block;
+    margin: 0 auto;
 
+    width: 90%;
+    max-width: 512px;
+}
 
 ::-webkit-input-placeholder { text-align:right; }
 input:-moz-placeholder { text-align:right; }

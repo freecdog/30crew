@@ -585,6 +585,14 @@
                 }).appendTo(this.$el);
                 this.$el.append("<br>");
 
+                var linkPromo = $('<a/>', {
+                    href: '/registration',
+                    class: 'indexAnchor jGreen'
+                });
+                linkPromo.append("Registration");
+                this.$el.append(linkPromo);
+                this.$el.append("<br>");
+
                 this.$el.append(this.inputLoginView.el);
                 //this.$el.append("<br>");
                 this.$el.append("<br>");
@@ -592,6 +600,7 @@
                 //this.$el.append("<br>");
                 this.$el.append("<br>");
                 this.$el.append(this.inputSubmitView.el);
+                this.$el.append("<br>");
             }
             return this;
         }

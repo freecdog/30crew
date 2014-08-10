@@ -12,7 +12,8 @@
         urlRoot: '/api/newUserSpecial',
         defaults: {
             login: '',
-            password: ''
+            password: '',
+            promo: ''
         },
         initialize: function() {
             console.log('User initialized');
@@ -53,6 +54,25 @@
             this.$el.attr('pattern','.{3,16}');
             this.$el.attr('required', true);
             this.$el.attr('title', 'min 3, max 16');
+            //this.listenTo(this.options.parent.model, "change:names", this.listener);
+        },
+        render: function(){
+            this.$el.empty();
+            //this.$el.append("asdf");
+            return this;
+        }
+    });
+    $.registration.InputPromoView = Backbone.View.extend({
+        tagName: 'input',
+        className: 'promoView',
+        initialize: function(){
+            //this.$el.attr('contentEditable',true);
+            this.$el.attr('name','promo');
+            this.$el.attr('placeholder','promo code');
+
+            this.$el.attr('pattern','.{16}');
+            this.$el.attr('required', true);
+            this.$el.attr('title', '16 symbols');
             //this.listenTo(this.options.parent.model, "change:names", this.listener);
         },
         render: function(){
@@ -112,6 +132,9 @@
             this.inputPasswordView = new $.registration.InputPasswordView();
             this.inputPasswordView.render();
 
+            this.inputPromoView = new $.registration.InputPromoView();
+            this.inputPromoView.render();
+
             this.inputSubmitView = new $.registration.InputSubmitView();
             this.inputSubmitView.render();
         },
@@ -129,7 +152,8 @@
 
             this.model.set({
                 login: this.el.elements["login"].value,
-                password: this.el.elements["password"].value
+                password: this.el.elements["password"].value,
+                promo: this.el.elements["promo"].value
             });
 
             this.model.login(null, {
@@ -161,6 +185,8 @@
             this.$el.append("<br>");
             this.$el.append(this.inputPasswordView.el);
             //this.$el.append("<br>");
+            this.$el.append("<br>");
+            this.$el.append(this.inputPromoView.el);
             this.$el.append("<br>");
             this.$el.append(this.inputSubmitView.el);
             this.$el.append("<br>");

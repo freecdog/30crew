@@ -19,7 +19,7 @@ router.post('/', function(req, res) {
         var reLogin = new RegExp("^[A-z0-9_-]{3,16}$");
         //console.log("regexp:", reLogin.test("aAaa"));
 
-        var rePassword = new RegExp("^[A-z0-9_-]{4,18}$");
+        var rePassword = new RegExp("^[A-z0-9_-]{4,16}$");
 
         var loginMatch = reLogin.test(login);
         var passwordMatch = rePassword.test(password);

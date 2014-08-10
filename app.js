@@ -162,6 +162,42 @@ app.findSession = function(sessionID){
 // TODO, move to DB, maybe config too?
 app.users = {};
 loadFromJSONFile(app.users, path.join(__dirname, 'users.txt'));
+app.promos = {};
+loadFromJSONFile(app.promos, path.join(__dirname, 'promos.txt'));
+app.usePromo = function(promo){
+    var ans = null;
+    if (app.promos.hasOwnProperty(promo)) {
+
+        delete app.promos[promo];
+
+        var fs = require('fs');
+
+        var filePath = path.join(__dirname, 'promos.txt');
+        try {
+            var filedata = fs.readFileSync(filePath, {encoding: "utf8"});
+            // some hack with first symbol =/
+            filedata = filedata.replace(/^\uFEFF/, '');
+            // parsing file to JSON object
+            var jsondata = JSON.parse(filedata);
+
+            if (jsondata) {
+                delete jsondata[promo];
+
+                fs.writeFileSync(filePath, JSON.stringify(jsondata));
+
+                ans = true;
+            } else {
+                console.log('No json data in file');
+            }
+        } catch (e) {
+            console.log("error:", e);
+        }
+    } else {
+        console.log('This promo already used', promo);
+    }
+
+    return ans;
+};
 app.findUser = function(login, password){
     var user = null;
     if (app.users.hasOwnProperty(login)){
@@ -172,36 +208,47 @@ app.findUser = function(login, password){
     }
     return user;
 };
-app.newUser = function(login, password){
+app.newUser = function(login, password, promo){
     var ans = null;
-
     if (app.users.hasOwnProperty(login)) {
         console.log("login already exist");
     } else {
-        app.users[login] = password;
+        function addUser(){
+            app.users[login] = password;
 
-        var fs = require('fs');
+            var fs = require('fs');
 
-        var filePath = path.join(__dirname, 'users.txt');
-        try {
-            var filedata = fs.readFileSync(filePath, {encoding: "utf8"});
-            // some hack with first symbol =/
-            filedata = filedata.replace(/^\uFEFF/, '');
-            // parsing file to JSON object
-            var jsondata = JSON.parse(filedata);
+            var filePath = path.join(__dirname, 'users.txt');
+            try {
+                var filedata = fs.readFileSync(filePath, {encoding: "utf8"});
+                // some hack with first symbol =/
+                filedata = filedata.replace(/^\uFEFF/, '');
+                // parsing file to JSON object
+                var jsondata = JSON.parse(filedata);
 
-            if (jsondata){
-                jsondata[login] = password;
+                if (jsondata) {
+                    jsondata[login] = password;
 
-                fs.writeFileSync(filePath, JSON.stringify(jsondata));
-            } else {
-                console.log('No json data in file');
+                    fs.writeFileSync(filePath, JSON.stringify(jsondata));
+                } else {
+                    console.log('No json data in file');
+                }
+            } catch (e) {
+                console.log("error:", e);
             }
-        } catch (e) {
-            console.log("error:", e);
+
+            return app.findUser(login, password);
         }
 
-        ans = app.findUser(login, password);
+        if (promo) {
+            if (app.usePromo(promo)) {
+                ans = addUser();
+            } else {
+                console.log('Using of promo failed');
+            }
+        } else {
+            ans = addUser();
+        }
     }
 
     return ans;
