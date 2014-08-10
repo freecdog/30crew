@@ -351,8 +351,6 @@ app.newUser = function(login, password, promo){
     return ans;
 };
 //app.generatePromos(20);
-//app.newUser('c0','passc0');
-//app.newUser('c1','passc1');
 
 function loadUser(req, res, next) {
     if (config.authentication == false) {
