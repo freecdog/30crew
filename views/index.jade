@@ -4,10 +4,10 @@ block content
     //-
         p= title
 
-    img(src='/images/leaf-256-green.png', class='logoImage')
-    br
-    a(href='/registration', class='indexAnchor jGreen') Registration
-    br
+    img(src='/images/leaf-256-green.png', class='logoImage onlyForLogin')
+    br(class='onlyForLogin')
+    a(href='/registration', class='indexAnchor jGreen onlyForLogin') Registration
+    br(class='onlyForLogin')
 
     script(src="/javascripts/jquery-1.9.1.js")
     script(src="/javascripts/underscore.js")

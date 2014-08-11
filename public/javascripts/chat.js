@@ -524,6 +524,8 @@
 
             this.initViews();
 
+            this.$body = $('body');
+
             this.render();
         },
         initViews: function(){
@@ -586,8 +588,11 @@
         render: function(){
             this.$el.empty();
             if (this.auth) {
+                $('.onlyForLogin').detach();
+
                 console.log("login form out");
             } else {
+
                 //var img = $('<img/>', {
                 //    class: 'logoImage'
                 //}).appendTo(this.$el);
