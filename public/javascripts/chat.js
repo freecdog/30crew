@@ -501,12 +501,12 @@
         className: 'inputSubmitView',
         initialize: function(){
             this.$el.attr('type','submit');
-            this.$el.attr('value','[submit]');
+            this.$el.attr('value','[login]');
 
             // impossible for mobile devices =/
             //this.$el.css('display','none');
         },
-        buttonTemplate: _.template("[submit]"),
+        buttonTemplate: _.template("[login]"),
         render: function() {
             this.$el.empty();
             this.$el.append(this.buttonTemplate());
@@ -588,18 +588,18 @@
             if (this.auth) {
                 console.log("login form out");
             } else {
-                var img = $('<img/>', {
-                    class: 'logoImage'
-                }).appendTo(this.$el);
-                this.$el.append("<br>");
+                //var img = $('<img/>', {
+                //    class: 'logoImage'
+                //}).appendTo(this.$el);
+                //this.$el.append("<br>");
 
-                var linkPromo = $('<a/>', {
-                    href: '/registration',
-                    class: 'indexAnchor jGreen'
-                });
-                linkPromo.append("Registration");
-                this.$el.append(linkPromo);
-                this.$el.append("<br>");
+                //var linkPromo = $('<a/>', {
+                //    href: '/registration',
+                //    class: 'indexAnchor jGreen'
+                //});
+                //linkPromo.append("Registration");
+                //this.$el.append(linkPromo);
+                //this.$el.append("<br>");
 
                 this.$el.append(this.inputLoginView.el);
                 //this.$el.append("<br>");

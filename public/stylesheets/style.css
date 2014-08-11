@@ -98,8 +98,6 @@ a {
     max-width: 512px;
 }
 .logoImage {
-    content: url('../images/leaf-256-green.png');
-
     display: block;
     margin: 0 auto;
 
