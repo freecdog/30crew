@@ -1,13 +1,13 @@
 @font-face {
     /* http://webdesignerwall.com/general/font-face-solutions-suggestions */
-    font-family: 'Segoe UI light';
-    src: url('../fonts/segoeuil.ttf') format('truetype');
+    font-family: 'Open Sans Light';
+    src: url('../fonts/open-sans.light.ttf') format('truetype');
 }
 
 body {
     /*padding: 50px;
     margin: 0px;*/
-    font: 2.5em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 2.5em "Open Sans Light", "Lucida Grande", Helvetica, Arial, sans-serif;
     color: #ECE9E9;
     background-color: #343434;
 }
@@ -38,7 +38,7 @@ a {
 
     padding: 0px;
     border: 1px solid darkgray;
-    font: 1em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 1em "Open Sans Light", "Lucida Grande", Helvetica, Arial, sans-serif;
     color: #ECE9E9;
     background-color: #343434;
 
@@ -51,7 +51,7 @@ a {
 
     padding: 0px;
     border: 1px solid darkgray;
-    font: 1em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 1em "Open Sans Light", "Lucida Grande", Helvetica, Arial, sans-serif;
     color: darkgray;
     background-color: #343434;
 
@@ -64,7 +64,7 @@ a {
 
     padding: 0px;
     border: 1px solid darkgray;
-    font: 1em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 1em "Open Sans Light", "Lucida Grande", Helvetica, Arial, sans-serif;
     color: #ECE9E9;
     background-color: #343434;
 
@@ -77,7 +77,7 @@ a {
 
     padding: 0px;
     border: 1px solid darkgray;
-    font: 1em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 1em "Open Sans Light", "Lucida Grande", Helvetica, Arial, sans-serif;
     color: #ECE9E9;
     background-color: #343434;
 
@@ -90,7 +90,7 @@ a {
 
     padding: 0px;
     border: 1px solid darkgray;
-    font: 1em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 1em "Open Sans Light", "Lucida Grande", Helvetica, Arial, sans-serif;
     color: #ECE9E9;
     background-color: #343434;
 
@@ -262,7 +262,7 @@ ul {
 
 .inputMessage {
     margin: 0px;
-    font: 1em "Segoe UI Light", "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 1em "Open Sans Light", "Lucida Grande", Helvetica, Arial, sans-serif;
     border: 1px solid darkgray;
     color: #ECE9E9;
     background-color: #343434;
