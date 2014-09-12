@@ -1,5 +1,5 @@
 /**
- * Created by yarvyk on 04.08.2014.
+ * Created by jaric on 04.08.2014.
  */
 
 (function($) {
@@ -32,6 +32,16 @@
             console.log('BannedIp initialized');
         },
         banIp: function(attributes, callback){
+            this.save(attributes, callback);
+        }
+    });
+
+    $.manage.RestartServer = Backbone.Model.extend({
+        urlRoot: '/api/restartServer',
+        initialize: function() {
+            console.log('BannedIp initialized');
+        },
+        restartServer: function(attributes, callback){
             this.save(attributes, callback);
         }
     });
@@ -263,6 +273,60 @@
         }
     });
 
+    $.manage.InputFormRestartServerView = Backbone.View.extend({
+        tagName: 'form',
+        id: 'restartServer',
+
+        initialize: function () {
+            this.initViews();
+
+            this.render();
+        },
+        initViews: function(){
+            this.inputSubmitView = new $.manage.InputSubmitView();
+            this.inputSubmitView.render();
+        },
+
+        events : {
+            // https://developer.mozilla.org/en-US/docs/Web/Events
+            //"change" : "change",
+            "submit" : "restartServer"
+        },
+        restartServer : function(event) {
+            if (!confirm('Do you really want to restart server?')) return false;
+
+            var self = this;
+
+            console.log('trying to restart server');
+            event.preventDefault();
+
+            this.model.restartServer(null, {
+                success: function(model,values) {
+                    console.log("server was successfully restarted", model, values);
+
+                    self.render();
+                },
+                error: function( model, response) {
+                    console.log("Could not restart server:", response);
+                    alert("Could not restart server, no permission");
+                }
+            });
+            event.currentTarget.checkValidity();
+            return false;
+        },
+        titleTemplate: _.template('<div class="manageTitle jBlue">Restart server:</div>'),
+        render: function(){
+            this.$el.empty();
+
+            this.$el.append(this.titleTemplate());
+
+            this.$el.append(this.inputSubmitView.el);
+            this.$el.append("<p></p>");
+
+            return this;
+        }
+    });
+
     // Router
 
     // looks like main application class
@@ -286,6 +350,10 @@
             this.bannedIpModel = new $.manage.BannedIp();
             var inputFormBannedIpView = new $.manage.InputFormBannedIpView({model: this.bannedIpModel});
             $body.append(inputFormBannedIpView.render().el);
+
+            this.restartModel = new $.manage.RestartServer();
+            var inputFormRestartServerView = new $.manage.InputFormRestartServerView({model: this.restartModel});
+            $body.append(inputFormRestartServerView.render().el);
         }
     });
 

@@ -288,6 +288,12 @@
             this.addMessageElement($el, options);
         },
 
+        dateToStr: function(date) {
+            //var time_str = date.getFullYear() + "." + (date.getMonth()+1) + "." + date.getDate() + " " + date.toLocaleTimeString();
+            var time_str = date.toLocaleTimeString();
+            return time_str;
+        },
+
         // Adds the visual chat message to the message list
         addChatMessage: function(data, options){
             // Don't fade the message in if there is an 'X was typing'
@@ -299,7 +305,7 @@
             }
 
             var $usernameDiv = $('<span class="username"/>')
-                .text(data.username)
+                .text(data.username + ' (' + this.dateToStr(new Date()) +')')
                 .css('color', this.getUsernameColor(data.username));
             var $messageBodyDiv = $('<span class="messageBody">')
                 .text(data.message);

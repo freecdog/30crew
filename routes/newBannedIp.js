@@ -1,5 +1,5 @@
 /**
- * Created by yarvyk on 05.08.2014.
+ * Created by jaric on 05.08.2014.
  */
 
 var express = require('express');

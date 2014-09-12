@@ -21,6 +21,9 @@ a {
 .jRed {
     color: #d15151;
 }
+.jBlue {
+    color: #0062b1;
+}
 
 .inputViewDiv {
     -moz-appearance: textfield;

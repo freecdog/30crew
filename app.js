@@ -59,6 +59,19 @@ function loadFromJSONFile(extendedObject, filePath){
 //console.log(JSON.stringify(app.config));
 loadFromJSONFile(app.config, path.join(__dirname, 'config.txt'));
 
+var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
+function restartServer(){
+    // spawn will ruin server so Forever should back it up.
+    spawn("sudo service node29 restart");
+}
+function updateServer(callback){
+    // update from github
+    exec("git --git-dir=" + path.join(__dirname, '.git') + " --work-tree=" + __dirname + " pull origin master", callback);
+}
+app.restartServer = restartServer;
+app.updateServer = updateServer;
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
