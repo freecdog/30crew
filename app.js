@@ -63,7 +63,7 @@ var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
 function restartServer(){
     // spawn will ruin server so Forever should back it up.
-    spawn("sudo service node29 restart");
+    spawn("sudo service node30 restart");
 }
 function updateServer(callback){
     // update from github
